@@ -5,18 +5,19 @@ import android.graphics.Paint
 import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
 import android.text.Layout
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,15 +44,18 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-val tileValues = listOf(Tile.BLANK,Tile.BLANK ,Tile.BLANK,Tile.BLANK,Tile.BLANK,Tile.BLANK)
+val tileValues = listOf(
+    TileData.B,
+    TileData.B,TileData.B,TileData.B ,
+    TileData.B,TileData.B,TileData.B,
+    TileData.B,TileData.B)
 
-enum class Tile{
+enum class TileData{
     X,
     O,
-    BLANK
+    B
 }
 
-val numbers = (0..8).toList()
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -59,27 +63,34 @@ fun gameBoard(){
     LazyVerticalGrid(
         cells = GridCells.Fixed(3)
     ){
-        items(numbers.size){
+        items(tileValues.size){
             Column(
-
                 verticalArrangement = Arrangement.Center
             ){
                 Card(
                     modifier = Modifier
                         .fillMaxSize()
-                        .size(140.dp),
-
-                    backgroundColor = Color.White
-                ){
-                    Text(
-                        text = "$it",
-                        textAlign = TextAlign.Center,
-                        fontSize = 90.sp,
-                        modifier = Modifier
-                            .border(5.dp, Color(0xFFEAECF0))
-                    )
+                        .size(140.dp)
+                        .background(Color.White)
+                ) {
+                    TileButton(tileValues[it])
                 }
             }
         }
+    }
+}
+
+@Composable
+fun TileButton(tileValue: TileData){
+    val tileState = remember {mutableStateOf(tileValue)}
+
+    OutlinedButton(
+        onClick = {tileState.value = TileData.X}
+    ){
+        Text(
+            text = tileState.value.toString(),
+            textAlign = TextAlign.Center,
+            fontSize = 90.sp
+        )
     }
 }
