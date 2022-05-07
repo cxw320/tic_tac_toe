@@ -1,15 +1,29 @@
 package com.example.tic_tac_toe
 
+
+import android.graphics.Paint
+import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
+import android.text.Layout
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
+import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tic_tac_toe.ui.theme.Tic_tac_toeTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,24 +34,52 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    color = androidx.compose.ui.graphics.Color.LightGray
                 ) {
-                    Greeting("Android")
+                    gameBoard()
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
+val tileValues = listOf(Tile.BLANK,Tile.BLANK ,Tile.BLANK,Tile.BLANK,Tile.BLANK,Tile.BLANK)
+
+enum class Tile{
+    X,
+    O,
+    BLANK
 }
 
-@Preview(showBackground = true)
+val numbers = (0..8).toList()
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun DefaultPreview() {
-    Tic_tac_toeTheme {
-        Greeting("Android")
+fun gameBoard(){
+    LazyVerticalGrid(
+        cells = GridCells.Fixed(3)
+    ){
+        items(numbers.size){
+            Column(
+
+                verticalArrangement = Arrangement.Center
+            ){
+                Card(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .size(140.dp),
+
+                    backgroundColor = Color.White
+                ){
+                    Text(
+                        text = "$it",
+                        textAlign = TextAlign.Center,
+                        fontSize = 90.sp,
+                        modifier = Modifier
+                            .border(5.dp, Color(0xFFEAECF0))
+                    )
+                }
+            }
+        }
     }
 }
