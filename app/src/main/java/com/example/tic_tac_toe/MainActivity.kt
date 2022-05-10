@@ -1,28 +1,23 @@
 package com.example.tic_tac_toe
 
 
-import android.graphics.Paint
-import android.graphics.drawable.shapes.Shape
 import android.os.Bundle
-import android.text.Layout
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tic_tac_toe.ui.theme.Tic_tac_toeTheme
@@ -56,10 +51,17 @@ enum class TileData{
     B
 }
 
+enum class Player {
+    ONE,
+    TWO
+}
+
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun gameBoard(){
+
+    var currentPlayer = remember {mutableStateOf(Player.ONE)}
     LazyVerticalGrid(
         cells = GridCells.Fixed(3)
     ){
@@ -73,7 +75,7 @@ fun gameBoard(){
                         .size(140.dp)
                         .background(Color.White)
                 ) {
-                    TileButton(tileValues[it])
+                    TileButton(tileValues[it], currentPlayer )
                 }
             }
         }
@@ -81,11 +83,22 @@ fun gameBoard(){
 }
 
 @Composable
-fun TileButton(tileValue: TileData){
+fun TileButton(tileValue: TileData, currentPlayer: MutableState<Player>){
     val tileState = remember {mutableStateOf(tileValue)}
-
     OutlinedButton(
-        onClick = {tileState.value = TileData.X}
+        onClick = {
+            tileState.value = if(currentPlayer.value==Player.ONE){
+                TileData.X
+            }else{
+                TileData.O
+            }
+            if(currentPlayer.value==Player.ONE){
+                currentPlayer.value = Player.TWO
+            } else{
+                currentPlayer.value = Player.ONE
+            }
+            Log.d("Caroline","${currentPlayer.value}")
+        }
     ){
         Text(
             text = tileState.value.toString(),
