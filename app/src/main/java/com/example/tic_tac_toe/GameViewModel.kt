@@ -11,14 +11,8 @@ class GameViewModel {
 
     val currentPlayer = mutableStateOf(Player.ONE)
 
-    var row1Score = 0
-    var row2Score = 0
-    var row3Score = 0
-    var col1Score = 0
-    var col2Score = 0
-    var col3Score = 0
-    var diag1Score = 0
-    var diag2Score = 0
+    val winner = mutableStateOf("")
+
 
     init{
         for(i in 0.. 8){
@@ -44,18 +38,61 @@ class GameViewModel {
 
     fun checkForWinningBoard(){
 
+        val scoreHashMap = mutableMapOf<String,Int>()
+
+        scoreHashMap.put("ROW1",0)
+        scoreHashMap.put("ROW2",0)
+        scoreHashMap.put("ROW3",0)
+        scoreHashMap.put("COL1",0)
+        scoreHashMap.put("COL2",0)
+        scoreHashMap.put("COL3",0)
+        scoreHashMap.put("DIAG1",0)
+        scoreHashMap.put("DIAG2",0)
+
         for(i in 0..gameBoardMap.size){
             Log.d("Caroline", gameBoardMap[i].toString())
             when(i){
-                in 0..2 -> row1Score = row1Score + gameBoardMap[i]!!
-                in 3..5 -> row2Score += gameBoardMap[i]!!
-                in 6..8 -> row3Score += gameBoardMap[i]!!
-                in arrayListOf(0,3,6) -> col1Score += gameBoardMap[i]!!
-                in arrayListOf(1,4,7) -> col2Score += gameBoardMap[i]!!
-                in arrayListOf(2,5,8) -> col3Score += gameBoardMap[i]!!
+                in 0..2 -> scoreHashMap.put("ROW1",
+                    scoreHashMap["ROW1"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in 3..5 -> scoreHashMap.put("ROW2",
+                    scoreHashMap["ROW2"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in 6..8 -> scoreHashMap.put("ROW3",
+                    scoreHashMap["ROW3"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in arrayListOf(0,3,6) -> scoreHashMap.put("COL1",
+                    scoreHashMap["COL1"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in arrayListOf(1,4,7) -> scoreHashMap.put("COL2",
+                    scoreHashMap["COL2"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in arrayListOf(2,5,8) -> scoreHashMap.put("COL3",
+                    scoreHashMap["COL3"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in arrayListOf(0,4,8) -> scoreHashMap.put("DIAG1",
+                    scoreHashMap["DIAG1"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
+                in arrayListOf(2,4,6) -> scoreHashMap.put("DIAG2",
+                    scoreHashMap["DIAG2"]?.plus(gameBoardMap[i]!!) ?: 0
+                )
             }
+
+
+            var winnerIndex = scoreHashMap.filter{score->score.value==3}
+            Log.d("Caroline","winner index is ${winnerIndex.keys}")
+            if (winnerIndex.isNotEmpty()){
+                when(currentPlayer.value){
+                    Player.ONE -> winner.value="Game Over: Player One has won"
+                    Player.TWO -> winner.value="Game Over: Player Two has won"
+                }
+                Log.d("Caroline",winner.value.toString())
+            }
+
+
+
+
         }
-        Log.d("Caroline", "Score is $row1Score")
 
 
     }

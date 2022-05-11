@@ -100,8 +100,8 @@ fun TileButton(gameBoardIndex: Int, gameViewModel: GameViewModel){
         onClick = {
             gameViewModel.apply{
                 updateGameTile(gameBoardIndex)
-                updateCurrentPlayer()
                 checkForWinningBoard()
+                updateCurrentPlayer()
             }
         }
     ){
