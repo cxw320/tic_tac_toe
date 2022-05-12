@@ -11,7 +11,7 @@ class GameViewModel {
 
     val currentPlayer = mutableStateOf(Player.ONE)
 
-    val winner = mutableStateOf("")
+    val winner = mutableStateOf("Welcome to TicTacToe")
 
 
     init{
@@ -50,17 +50,22 @@ class GameViewModel {
         scoreHashMap.put("DIAG2",0)
 
         for(i in 0..gameBoardMap.size){
-            Log.d("Caroline", gameBoardMap[i].toString())
+          //  Log.d("Caroline", gameBoardMap[i].toString())
             when(i){
-                in 0..2 -> scoreHashMap.put("ROW1",
+                in 0..2 -> scoreHashMap.put(
+                    "ROW1",
                     scoreHashMap["ROW1"]?.plus(gameBoardMap[i]!!) ?: 0
                 )
-                in 3..5 -> scoreHashMap.put("ROW2",
+                in 3..5 -> scoreHashMap.put(
+                    "ROW2",
                     scoreHashMap["ROW2"]?.plus(gameBoardMap[i]!!) ?: 0
                 )
-                in 6..8 -> scoreHashMap.put("ROW3",
+                in 6..8 -> scoreHashMap.put(
+                    "ROW3",
                     scoreHashMap["ROW3"]?.plus(gameBoardMap[i]!!) ?: 0
                 )
+            }
+            when(i){
                 in arrayListOf(0,3,6) -> scoreHashMap.put("COL1",
                     scoreHashMap["COL1"]?.plus(gameBoardMap[i]!!) ?: 0
                 )
@@ -70,6 +75,8 @@ class GameViewModel {
                 in arrayListOf(2,5,8) -> scoreHashMap.put("COL3",
                     scoreHashMap["COL3"]?.plus(gameBoardMap[i]!!) ?: 0
                 )
+            }
+            when(i){
                 in arrayListOf(0,4,8) -> scoreHashMap.put("DIAG1",
                     scoreHashMap["DIAG1"]?.plus(gameBoardMap[i]!!) ?: 0
                 )
@@ -79,22 +86,15 @@ class GameViewModel {
             }
 
 
-            var winnerIndex = scoreHashMap.filter{score->score.value==3}
+            val winnerIndex = scoreHashMap.filter{score->score.value==3||score.value==-3}
             Log.d("Caroline","winner index is ${winnerIndex.keys}")
             if (winnerIndex.isNotEmpty()){
                 when(currentPlayer.value){
                     Player.ONE -> winner.value="Game Over: Player One has won"
                     Player.TWO -> winner.value="Game Over: Player Two has won"
                 }
-                Log.d("Caroline",winner.value.toString())
             }
-
-
-
-
         }
-
-
     }
 
 }

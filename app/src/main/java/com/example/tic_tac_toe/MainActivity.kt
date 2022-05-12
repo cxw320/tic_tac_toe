@@ -84,7 +84,7 @@ fun gameBoard(gameViewModel: GameViewModel){
                 .align(Alignment.CenterHorizontally)
         ){
             Text(
-                text="Game Over: Player ${currentPlayer.value} won",
+                text=gameViewModel.winner.value,
                 modifier = Modifier
                     .padding(30.dp)
                     .fillMaxWidth()
