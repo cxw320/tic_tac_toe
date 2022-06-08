@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.ViewModel
+import com.example.repository.GameRepository
 
-class GameViewModel {
-
+class GameViewModel(
+    private val gameRepository: GameRepository
+) : ViewModel(){
     val gameBoardMap = mutableStateMapOf<Int,Int>()
 
     val currentPlayer = mutableStateOf(Player.ONE)

@@ -23,13 +23,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import com.example.tic_tac_toe.ui.theme.Tic_tac_toeTheme
+import org.koin.androidx.compose.getViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val gameViewModel = GameViewModel()
 
         setContent {
             Tic_tac_toeTheme {
@@ -38,6 +38,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = androidx.compose.ui.graphics.Color.LightGray
                 ) {
+                    val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current){
+                        "No ViewModelStoreOwner"
+                    }
+                    val gameViewModel = getViewModel<GameViewModel>(owner = viewModelStoreOwner)
                     gameBoard(gameViewModel)
                 }
             }
